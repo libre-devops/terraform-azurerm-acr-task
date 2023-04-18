@@ -1,32 +1,20 @@
-output "sa_id" {
-  value       = azurerm_storage_account.sa.id
-  description = "The ID of the storage account"
+output "acr_task_id" {
+  description = "The ID of the created task"
+  value = {
+    for key, value in azurerm_container_registry_task.acr_task : key => value.id
+  }
 }
 
-output "sa_name" {
-  value       = azurerm_storage_account.sa.name
-  description = "The name of the storage account"
+output "acr_task_name" {
+  description = "The name of the created task"
+  value = {
+    for key, value in azurerm_container_registry_task.acr_task : key => value.name
+  }
 }
 
-output "sa_primary_access_key" {
-  value       = azurerm_storage_account.sa.primary_access_key
-  description = "The primary access key of the storage account"
-  sensitive   = true
-}
-
-output "sa_primary_blob_endpoint" {
-  value       = azurerm_storage_account.sa.primary_blob_endpoint
-  description = "The primary blob endpoint of the storage account"
-}
-
-output "sa_primary_connection_string" {
-  value       = azurerm_storage_account.sa.primary_blob_connection_string
-  description = "The primary blob connection string of the storage account"
-  sensitive   = true
-}
-
-output "sa_secondary_access_key" {
-  value       = azurerm_storage_account.sa.secondary_access_key
-  description = "The secondary access key of the storage account"
-  sensitive   = true
+output "acr_task_identity" {
+  description = "The identity block"
+  value = {
+    for key, value in azurerm_container_registry_task.acr_task : key => value.identity
+  }
 }

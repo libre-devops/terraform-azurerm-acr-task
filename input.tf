@@ -15,13 +15,15 @@ variable "location" {
   type        = string
 }
 
-variable "rg_name" {
-  description = "The name of the resource group, this module does not create a resource group, it is expecting the value of a resource group already exists"
+
+variable "acr_tasks" {
+  description = "The ACR tasks block where each key is the name of the task"
+  type        = any
+}
+
+variable "acr_id" {
+  description = "The ID of the ACR this tasks is being made for"
   type        = string
-  validation {
-    condition     = length(var.rg_name) > 1 && length(var.rg_name) <= 24
-    error_message = "Resource group name is not valid."
-  }
 }
 
 variable "tags" {
