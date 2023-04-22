@@ -28,7 +28,7 @@ No modules.
 | <a name="input_identity_ids"></a> [identity\_ids](#input\_identity\_ids) | Specifies a list of user managed identity ids to be assigned to the VM. | `list(string)` | `[]` | no |
 | <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The Managed Service Identity Type of this Virtual Machine. | `string` | `""` | no |
 | <a name="input_location"></a> [location](#input\_location) | The location for this resource to be put in | `string` | n/a | yes |
-| <a name="input_schedule_task_run_now"></a> [schedule\_task\_run\_now](#input\_schedule\_task\_run\_now) | Whether a task should be scheduled for now, defaults to true | `bool` | `true` | no |
+| <a name="input_schedule_task_run_now"></a> [schedule\_task\_run\_now](#input\_schedule\_task\_run\_now) | Whether a task should be scheduled for now, defaults to true | `bool` | `false` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of the tags to use on the resources that are deployed with this module. | `map(string)` | <pre>{<br>  "source": "terraform"<br>}</pre> | no |
 
 ## Outputs

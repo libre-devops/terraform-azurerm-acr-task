@@ -28,7 +28,7 @@ variable "location" {
 variable "schedule_task_run_now" {
   description = "Whether a task should be scheduled for now, defaults to true"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "tags" {
