@@ -16,17 +16,6 @@ resource "azurerm_container_registry_task" "acr_task" {
     }
   }
 
-  dynamic "authentication" {
-    for_each = lookup(var.acr_tasks[each.key], "authentication", {}) != {} ? [1] : []
-    content {
-      token             = lookup(var.acr_tasks[each.key].authentication, "token", null)
-      token_type        = lookup(var.acr_tasks[each.key].authentication, "token_type", null)
-      expire_in_seconds = lookup(var.acr_tasks[each.key].authentication, "expire_in_seconds", null)
-      refresh_token     = lookup(var.acr_tasks[each.key].authentication, "refresh_token", null)
-      scope             = lookup(var.acr_tasks[each.key].authentication, "scope", null)
-    }
-  }
-
   dynamic "base_image_trigger" {
     for_each = lookup(var.acr_tasks[each.key], "base_image_trigger", {}) != {} ? [1] : []
     content {
@@ -35,16 +24,6 @@ resource "azurerm_container_registry_task" "acr_task" {
       enabled                     = lookup(var.acr_tasks[each.key].base_time_trigger, "enabled", null)
       update_trigger_endpoint     = lookup(var.acr_tasks[each.key].base_time_trigger, "update_trigger_endpoint", null)
       update_trigger_payload_type = lookup(var.acr_tasks[each.key].base_time_trigger, "update_trigger_payload_type", null)
-    }
-  }
-
-  dynamic "custom" {
-    for_each = lookup(var.acr_tasks[each.key], "custom", {}) != {} ? [1] : []
-    content {
-      login_server = lookup(var.acr_tasks[each.key].custom, "login_server", null)
-      identity     = lookup(var.acr_tasks[each.key].custom, "identity", null)
-      username     = lookup(var.acr_tasks[each.key].custom, "username", null)
-      password     = lookup(var.acr_tasks[each.key].custom, "password", null)
     }
   }
 
@@ -63,30 +42,30 @@ resource "azurerm_container_registry_task" "acr_task" {
     }
   }
 
-  #  dynamic "encoded_step" {
-  #    for_each = lookup(var.acr_tasks[each.key], "encoded_step",  {}) != {} ? [1] : []
-  #    content {
-  #      task_content = lookup(var.acr_tasks[each.key].encoded_step, "task_content", null)
-  #      context_access_token = lookup(var.acr_tasks[each.key].encoded_step, "context_access_token", null)
-  #      context_path = lookup(var.acr_tasks[each.key].encoded_step, "context_path", null)
-  #      secret_values = lookup(var.acr_tasks[each.key].encoded_step, "secret_values", null)
-  #      value_content = lookup(var.acr_tasks[each.key].encoded_step, "value_content", null)
-  #      values = lookup(var.acr_tasks[each.key].encoded_step, "values", null)
-  #    }
-  #  }
+  dynamic "encoded_step" {
+    for_each = lookup(var.acr_tasks[each.key], "encoded_step", {}) != {} ? [1] : []
+    content {
+      task_content         = lookup(var.acr_tasks[each.key].encoded_step, "task_content", null)
+      context_access_token = lookup(var.acr_tasks[each.key].encoded_step, "context_access_token", null)
+      context_path         = lookup(var.acr_tasks[each.key].encoded_step, "context_path", null)
+      secret_values        = lookup(var.acr_tasks[each.key].encoded_step, "secret_values", null)
+      value_content        = lookup(var.acr_tasks[each.key].encoded_step, "value_content", null)
+      values               = lookup(var.acr_tasks[each.key].encoded_step, "values", null)
+    }
+  }
 
 
-  #  dynamic "file_step" {
-  #    for_each = lookup(var.acr_tasks[each.key], "file_step",  {}) != {} ? [1] : []
-  #    content {
-  #      task_file_path = lookup(var.acr_tasks[each.key].file_step, "task_file_path",  {})
-  #      context_access_token = lookup(var.acr_tasks[each.key].file_step, "context_access_token", null)
-  #      context_path = lookup(var.acr_tasks[each.key].file_step, "context_path", null)
-  #      secret_values = lookup(var.acr_tasks[each.key].file_step, "secret_values", null)
-  #      value_file_path = lookup(var.acr_tasks[each.key].file_step, "value_file_path", null)
-  #      values = lookup(var.acr_tasks[each.key].file_step, "values", null)
-  #    }
-  #  }
+  dynamic "file_step" {
+    for_each = lookup(var.acr_tasks[each.key], "file_step", {}) != {} ? [1] : []
+    content {
+      task_file_path       = lookup(var.acr_tasks[each.key].file_step, "task_file_path", {})
+      context_access_token = lookup(var.acr_tasks[each.key].file_step, "context_access_token", null)
+      context_path         = lookup(var.acr_tasks[each.key].file_step, "context_path", null)
+      secret_values        = lookup(var.acr_tasks[each.key].file_step, "secret_values", null)
+      value_file_path      = lookup(var.acr_tasks[each.key].file_step, "value_file_path", null)
+      values               = lookup(var.acr_tasks[each.key].file_step, "values", null)
+    }
+  }
 
   dynamic "platform" {
     for_each = lookup(var.acr_tasks[each.key], "platform", {}) != {} ? [1] : []
@@ -148,7 +127,7 @@ resource "azurerm_container_registry_task" "acr_task" {
     content {
       name     = lookup(var.acr_tasks[each.key].timer_trigger, "name", null)
       schedule = lookup(var.acr_tasks[each.key].timer_trigger, "schedule", null)
-      enabled = lookup(var.acr_tasks[each.key].timer_trigger, "enabled", null)
+      enabled  = lookup(var.acr_tasks[each.key].timer_trigger, "enabled", null)
 
     }
   }
@@ -175,4 +154,9 @@ resource "azurerm_container_registry_task" "acr_task" {
       identity_ids = length(var.identity_ids) > 0 ? var.identity_ids : []
     }
   }
+}
+
+resource "azurerm_container_registry_task_schedule_run_now" "schedule_run_now" {
+  for_each                   = var.schedule_task_run_now == true ? var.acr_tasks : {}
+  container_registry_task_id = azurerm_container_registry_task.acr_task[each.key].id
 }

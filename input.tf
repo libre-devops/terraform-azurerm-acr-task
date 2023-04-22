@@ -1,3 +1,13 @@
+variable "acr_id" {
+  description = "The ID of the ACR this tasks is being made for"
+  type        = string
+}
+
+variable "acr_tasks" {
+  description = "The ACR tasks block where each key is the name of the task"
+  type        = any
+}
+
 variable "identity_ids" {
   description = "Specifies a list of user managed identity ids to be assigned to the VM."
   type        = list(string)
@@ -15,15 +25,10 @@ variable "location" {
   type        = string
 }
 
-
-variable "acr_tasks" {
-  description = "The ACR tasks block where each key is the name of the task"
-  type        = any
-}
-
-variable "acr_id" {
-  description = "The ID of the ACR this tasks is being made for"
-  type        = string
+variable "schedule_task_run_now" {
+  description = "Whether a task should be scheduled for now, defaults to true"
+  type        = bool
+  default     = true
 }
 
 variable "tags" {
