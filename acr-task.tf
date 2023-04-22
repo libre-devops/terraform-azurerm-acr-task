@@ -156,6 +156,19 @@ resource "azurerm_container_registry_task" "acr_task" {
   }
 }
 
+# There appears to be a bug with this resource in that an error is given when the task is successful
+/*
+module.acr_task.azurerm_container_registry_task_schedule_run_now.schedule_run_now["task1"]: Creating...
+╷
+│ Error: waiting for scheduled task to finish: unexpected state 'Failed', wanted target 'Succeeded'. last error: %!s(<nil>)
+│
+│   with module.acr_task.azurerm_container_registry_task_schedule_run_now.schedule_run_now["task1"],
+│   on ../../acr-task.tf line 159, in resource "azurerm_container_registry_task_schedule_run_now" "schedule_run_now":
+│  159: resource "azurerm_container_registry_task_schedule_run_now" "schedule_run_now" {
+│
+│ waiting for scheduled task to finish: unexpected state 'Failed', wanted target 'Succeeded'. last error: %!s(<nil>)
+
+*/
 resource "azurerm_container_registry_task_schedule_run_now" "schedule_run_now" {
   for_each                   = var.schedule_task_run_now == true ? var.acr_tasks : {}
   container_registry_task_id = azurerm_container_registry_task.acr_task[each.key].id

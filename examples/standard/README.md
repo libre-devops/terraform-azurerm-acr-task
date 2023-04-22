@@ -26,7 +26,7 @@ module "acr" {
 }
 
 module "acr_task" {
-  source = "../../"
+  source = "registry.terraform.io/libre-devops/container-registry-task/azurerm"
 
   location = module.rg.rg_location
   tags     = module.rg.rg_tags
@@ -37,6 +37,12 @@ module "acr_task" {
       is_system_task = false
       platform = {
         os = "Linux"
+      }
+
+      timer_trigger = {
+        name = "run-every-7-days"
+        schedule = "0 13 * * 6"
+        enabled = true
       }
 
       encoded_step = {
@@ -61,7 +67,6 @@ EOF
       }
     }
   }
-  schedule_task_run_now = true
 }
 ```
 ## Requirements
@@ -79,7 +84,7 @@ No requirements.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_acr"></a> [acr](#module\_acr) | registry.terraform.io/libre-devops/azure-container-registry/azurerm | n/a |
-| <a name="module_acr_task"></a> [acr\_task](#module\_acr\_task) | ../../ | n/a |
+| <a name="module_acr_task"></a> [acr\_task](#module\_acr\_task) | registry.terraform.io/libre-devops/container-registry-task/azurerm | n/a |
 | <a name="module_rg"></a> [rg](#module\_rg) | registry.terraform.io/libre-devops/rg/azurerm | n/a |
 
 ## Resources
